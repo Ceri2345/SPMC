@@ -3588,9 +3588,7 @@ void CApplication::OnPlayBackEnded()
 #ifdef HAS_PYTHON
   g_pythonParser.OnPlayBackEnded();
 #endif
-#ifdef TARGET_ANDROID
-  CXBMCApp::OnPlayBackEnded();
-#elif defined(TARGET_DARWIN_IOS)
+#if defined(TARGET_DARWIN_IOS)
   CDarwinUtils::EnableOSScreenSaver(true);
 #endif
 
@@ -3615,9 +3613,7 @@ void CApplication::OnPlayBackStarted()
   // (does nothing if python is not loaded)
   g_pythonParser.OnPlayBackStarted();
 #endif
-#ifdef TARGET_ANDROID
-  CXBMCApp::OnPlayBackStarted();
-#elif defined(TARGET_DARWIN_IOS)
+#if defined(TARGET_DARWIN_IOS)
   if (m_pPlayer->IsPlayingVideo())
     CDarwinUtils::EnableOSScreenSaver(false);
 #endif
@@ -3655,9 +3651,7 @@ void CApplication::OnPlayBackStopped()
 #ifdef HAS_PYTHON
   g_pythonParser.OnPlayBackStopped();
 #endif
-#ifdef TARGET_ANDROID
-  CXBMCApp::OnPlayBackStopped();
-#elif defined(TARGET_DARWIN_IOS)
+#if defined(TARGET_DARWIN_IOS)
   CDarwinUtils::EnableOSScreenSaver(true);
 #endif
 
@@ -3674,9 +3668,7 @@ void CApplication::OnPlayBackPaused()
 #ifdef HAS_PYTHON
   g_pythonParser.OnPlayBackPaused();
 #endif
-#ifdef TARGET_ANDROID
-  CXBMCApp::OnPlayBackPaused();
-#elif defined(TARGET_DARWIN_IOS)
+#if defined(TARGET_DARWIN_IOS)
   CDarwinUtils::EnableOSScreenSaver(true);
 #endif
 
@@ -3691,9 +3683,7 @@ void CApplication::OnPlayBackResumed()
 #ifdef HAS_PYTHON
   g_pythonParser.OnPlayBackResumed();
 #endif
-#ifdef TARGET_ANDROID
-  CXBMCApp::OnPlayBackResumed();
-#elif defined(TARGET_DARWIN_IOS)
+#if defined(TARGET_DARWIN_IOS)
   if (m_pPlayer->IsPlayingVideo())
     CDarwinUtils::EnableOSScreenSaver(false);
 #endif

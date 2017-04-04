@@ -671,12 +671,17 @@ unsigned int CAESinkAUDIOTRACK::AddPackets(uint8_t **data, unsigned int frames, 
   if (m_passthrough && !m_wantsIECPassthrough)
     duration = m_format.m_streamInfo.GetDuration() / 1000;
   else
-    duration = frames / m_format.m_sampleRate;
+    duration = (double)frames / m_format.m_sampleRate;
 
   // write as many frames of audio as we can fit into our internal buffer.
   int written = 0;
   if (frames)
   {
+    if (m_extTimer.MillisLeft() > 0)
+    {
+      double sleeptime = std::min((double) m_extTimer.MillisLeft(), m_format.m_streamInfo.GetDuration());
+      usleep(sleeptime * 1000);
+    }
     if (m_at_jni->getPlayState() != CJNIAudioTrack::PLAYSTATE_PLAYING)
       m_at_jni->play();
 
@@ -685,7 +690,6 @@ unsigned int CAESinkAUDIOTRACK::AddPackets(uint8_t **data, unsigned int frames, 
     {
       int bsize = std::min(toWrite, m_min_buffer_size);
       int len = AudioTrackWrite((char*)(&out_buf[written]), 0, bsize);
-      // int len = m_at_jni->write((char*)(&out_buf[written]), bsize, (int64_t)(m_duration_written * 1000000));  // by timestamp
       if (len < 0)
       {
         CLog::Log(LOGERROR, "CAESinkAUDIOTRACK::AddPackets write returned error:  %d(%d)", len, written);
